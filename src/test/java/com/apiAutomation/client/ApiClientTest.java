@@ -54,6 +54,7 @@ class ApiClientTest {
         TestLogger.attach("response.body", response.body());
 
         ApiAssertions.assertStatusCode(response, 404);
+        ApiAssertions.assertBodyContains(response.body(), "{}");
     }
 
     @Test

@@ -81,20 +81,13 @@ public class UserService {
         }
 
         User user = new User();
-        user.id = parseIntSafe(parsed.get("id"));
-        user.name = parsed.get("name");
-        user.username = parsed.get("username");
-        user.email = parsed.get("email");
+        user.id = JsonParser.getInt(parsed, "id");
+        user.name = JsonParser.getString(parsed, "name");
+        user.username = JsonParser.getString(parsed, "username");
+        user.email = JsonParser.getString(parsed, "email");
         user.phone = parsed.get("phone");
         user.website = parsed.get("website");
         return user;
-    }
-
-    private int parseIntSafe(String value) {
-        if (value == null || value.isBlank()) {
-            return 0;
-        }
-        return Integer.parseInt(value);
     }
 
     private Map<String, Object> toPayload(User user) {

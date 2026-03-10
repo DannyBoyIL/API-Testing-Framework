@@ -138,8 +138,6 @@ public final class TestLogger {
     }
 
     private static void appendIndent(StringBuilder out, int indent) {
-        for (int i = 0; i < indent; i++) {
-            out.append("  ");
-        }
+        out.append("  ".repeat(Math.max(0, indent)));
     }
 }

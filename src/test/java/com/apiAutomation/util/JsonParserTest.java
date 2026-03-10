@@ -6,8 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class JsonParserTest {
 
@@ -20,9 +19,9 @@ class JsonParserTest {
         Map<String, String> parsed = JsonParser.parseObject(json);
         TestLogger.attach("parsed.map", JsonParser.toJson(parsed));
 
-        assertEquals("1", parsed.get("id"));
-        assertEquals("hello", parsed.get("title"));
-        assertEquals("false", parsed.get("completed"));
+        assertEquals(1, JsonParser.getInt(parsed, "id"));
+        assertEquals("hello", JsonParser.getString(parsed, "title"));
+        assertFalse(JsonParser.getBoolean(parsed, "completed"));
     }
 
     @Test
@@ -34,8 +33,8 @@ class JsonParserTest {
         Map<String, String> parsed = JsonParser.parseObject(json);
         TestLogger.attach("parsed.map", JsonParser.toJson(parsed));
 
-        assertEquals("1", parsed.get("id"));
-        assertEquals("Leanne", parsed.get("name"));
+        assertEquals(1, JsonParser.getInt(parsed, "id"));
+        assertEquals("Leanne", JsonParser.getString(parsed, "name"));
     }
 
     @Test

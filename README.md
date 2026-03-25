@@ -10,11 +10,11 @@ This suite targets the JSONPlaceholder public API and focuses on **Users**:
 * `GET /invalidEndpoint` → validate 404 handling
 
 ## Highlights
-* Plain Java HTTP via `java.net.http.HttpClient`
-* Manual assertions (no RestAssured, no Spring)
-* Custom minimal JSON parser (`JsonParser`)
-* OOP structure with `UserService` abstraction
-* Allure reporting + structured logs
+* **Plain Java HTTP** via `java.net.http.HttpClient` — no RestAssured, no Spring
+* **Manual assertions** to show what frameworks abstract away
+* **Custom minimal JSON parser** (`JsonParser`) for protocol-level transparency
+* **OOP structure** with `UserService` abstraction
+* **Allure reporting** + structured logs
 
 ## Tech Stack
 * Java 17

@@ -28,14 +28,14 @@ public final class TestLogger {
         }
 
         String trimmed = content.trim();
-        if (looksLikeJson(trimmed)) {
-            return prettyJson(trimmed);
+        if (looksLikeUserString(trimmed)) {
+            return prettyUserString(trimmed);
         }
         if (looksLikeMapString(trimmed)) {
             return prettyMapString(trimmed);
         }
-        if (looksLikeUserString(trimmed)) {
-            return prettyUserString(trimmed);
+        if (looksLikeJson(trimmed)) {
+            return prettyJson(trimmed);
         }
         return content;
     }

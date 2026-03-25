@@ -4,6 +4,7 @@ import com.apiAutomation.util.JsonParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -27,7 +28,7 @@ public class ApiClient {
             String method,
             Object requestBody,
             Class<T> responseType
-    ) throws Exception {
+    ) throws IOException, InterruptedException {
 
         HttpRequest.Builder builder = HttpRequest.newBuilder()
                 .uri(URI.create(baseUrl + endpoint))
@@ -35,22 +36,20 @@ public class ApiClient {
 
         if ("GET".equalsIgnoreCase(method)) {
             builder.GET();
+            logger.info("REQUEST GET {}", baseUrl + endpoint);
         } else if ("POST".equalsIgnoreCase(method)) {
             String json = buildJsonRequestBody(requestBody);
             builder.POST(HttpRequest.BodyPublishers.ofString(json));
-            logger.info("REQUEST {} {} bodyLength={}", method.toUpperCase(), baseUrl + endpoint, json.length());
+            logger.info("REQUEST POST {} bodyLength={}", baseUrl + endpoint, json.length());
         } else if ("PUT".equalsIgnoreCase(method)) {
             String json = buildJsonRequestBody(requestBody);
             builder.PUT(HttpRequest.BodyPublishers.ofString(json));
-            logger.info("REQUEST {} {} bodyLength={}", method.toUpperCase(), baseUrl + endpoint, json.length());
+            logger.info("REQUEST PUT {} bodyLength={}", baseUrl + endpoint, json.length());
         } else if ("DELETE".equalsIgnoreCase(method)) {
             builder.DELETE();
+            logger.info("REQUEST DELETE {}", baseUrl + endpoint);
         } else {
             throw new IllegalArgumentException("Unsupported HTTP method: " + method);
-        }
-
-        if ("GET".equalsIgnoreCase(method) || "DELETE".equalsIgnoreCase(method)) {
-            logger.info("REQUEST {} {}", method.toUpperCase(), baseUrl + endpoint);
         }
 
         HttpResponse<String> response =

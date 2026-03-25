@@ -6,6 +6,7 @@ import com.apiAutomation.config.Config;
 import com.apiAutomation.model.User;
 import com.apiAutomation.util.JsonParser;
 
+import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -17,7 +18,7 @@ public class UserService {
         this.apiClient = new ApiClient(Config.getBaseUrl());
     }
 
-    public ApiResponse<User> getUserById(int id) throws Exception {
+    public ApiResponse<User> getUserById(int id) throws IOException, InterruptedException {
         ApiResponse<String> rawResponse = apiClient.send(
                 "/users/" + id,
                 "GET",
@@ -30,7 +31,7 @@ public class UserService {
         return new ApiResponse<>(rawResponse.statusCode(), user, rawResponse.headers());
     }
 
-    public ApiResponse<User> createUser(User user) throws Exception {
+    public ApiResponse<User> createUser(User user) throws IOException, InterruptedException {
         ApiResponse<String> rawResponse = apiClient.send(
                 "/users",
                 "POST",
@@ -41,7 +42,7 @@ public class UserService {
         return new ApiResponse<>(rawResponse.statusCode(), parseUser(rawResponse.body()), rawResponse.headers());
     }
 
-    public ApiResponse<User> updateUser(int id, User user) throws Exception {
+    public ApiResponse<User> updateUser(int id, User user) throws IOException, InterruptedException {
         ApiResponse<String> rawResponse = apiClient.send(
                 "/users/" + id,
                 "PUT",
@@ -52,7 +53,7 @@ public class UserService {
         return new ApiResponse<>(rawResponse.statusCode(), parseUser(rawResponse.body()), rawResponse.headers());
     }
 
-    public ApiResponse<Void> deleteUser(int id) throws Exception {
+    public ApiResponse<Void> deleteUser(int id) throws IOException, InterruptedException {
         return apiClient.send(
                 "/users/" + id,
                 "DELETE",
@@ -61,7 +62,7 @@ public class UserService {
         );
     }
 
-    public ApiResponse<String> getInvalidEndpoint(String endpoint) throws Exception {
+    public ApiResponse<String> getInvalidEndpoint(String endpoint) throws IOException, InterruptedException {
         return apiClient.send(
                 endpoint,
                 "GET",

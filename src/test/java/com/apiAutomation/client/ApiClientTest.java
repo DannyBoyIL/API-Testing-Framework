@@ -2,8 +2,11 @@ package com.apiAutomation.client;
 
 import com.apiAutomation.model.User;
 import com.apiAutomation.service.UserService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
 
 class ApiClientTest {
 
@@ -15,7 +18,7 @@ class ApiClientTest {
     }
 
     @Test
-    void getUserById() throws Exception {
+    void getUserById() throws IOException, InterruptedException {
         TestLogger.step("GET /users/1");
         ApiResponse<User> response = userService.getUserById(1);
         TestLogger.attach("response.user", String.valueOf(response.body()));
@@ -26,7 +29,7 @@ class ApiClientTest {
     }
 
     @Test
-    void createUser() throws Exception {
+    void createUser() throws IOException, InterruptedException {
         TestLogger.step("POST /users");
         User payload = buildUser("John Doe", "jdoe", "john@example.com");
 
@@ -39,7 +42,7 @@ class ApiClientTest {
     }
 
     @Test
-    void getMissingUser() throws Exception {
+    void getMissingUser() throws IOException, InterruptedException {
         TestLogger.step("GET /users/999999");
         ApiResponse<User> response = userService.getUserById(999999);
         TestLogger.attach("response.user", String.valueOf(response.body()));
@@ -48,7 +51,7 @@ class ApiClientTest {
     }
 
     @Test
-    void getInvalidEndpoint() throws Exception {
+    void getInvalidEndpoint() throws IOException, InterruptedException {
         TestLogger.step("GET /invalidEndpoint");
         ApiResponse<String> response = userService.getInvalidEndpoint("/invalidEndpoint");
         TestLogger.attach("response.body", response.body());
@@ -58,7 +61,7 @@ class ApiClientTest {
     }
 
     @Test
-    void updateUser() throws Exception {
+    void updateUser() throws IOException, InterruptedException {
         TestLogger.step("PUT /users/1");
         User payload = buildUser("Jane Doe", "jane", "jane@example.com");
 
@@ -71,7 +74,7 @@ class ApiClientTest {
     }
 
     @Test
-    void deleteUser() throws Exception {
+    void deleteUser() throws IOException, InterruptedException {
         TestLogger.step("DELETE /users/1");
         ApiResponse<Void> response = userService.deleteUser(1);
 
@@ -89,17 +92,9 @@ class ApiClientTest {
     }
 
     private void assertUserBasics(User user) {
-        if (user == null) {
-            throw new AssertionError("Expected user but got null");
-        }
-        if (user.name == null || user.name.isBlank()) {
-            throw new AssertionError("Expected name");
-        }
-        if (user.username == null || user.username.isBlank()) {
-            throw new AssertionError("Expected username");
-        }
-        if (user.email == null || user.email.isBlank()) {
-            throw new AssertionError("Expected email");
-        }
+        Assertions.assertNotNull(user, "Expected user but got null");
+        Assertions.assertFalse(user.name == null || user.name.isBlank(), "Expected name");
+        Assertions.assertFalse(user.username == null || user.username.isBlank(), "Expected username");
+        Assertions.assertFalse(user.email == null || user.email.isBlank(), "Expected email");
     }
 }

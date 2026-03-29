@@ -39,6 +39,53 @@ Serve report locally:
 mvn allure:serve
 ```
 
+## Example Tests
+The following tests cover the full CRUD surface of the JSONPlaceholder Users API. Each test uses `TestLogger` to attach request/response details to the Allure report and `ApiAssertions` for readable, custom assertions:
+
+```java
+@Test
+void getUserById() throws IOException, InterruptedException {
+    TestLogger.step("GET /users/1");
+    ApiResponse<User> response = userService.getUserById(1);
+    TestLogger.attach("response.user", String.valueOf(response.body()));
+
+    ApiAssertions.assertStatusCode(response, 200);
+    ApiAssertions.assertHeaderContains(response, "content-type", "application/json");
+    assertUserBasics(response.body());
+}
+
+@Test
+void createUser() throws IOException, InterruptedException {
+    TestLogger.step("POST /users");
+    User payload = buildUser("John Doe", "jdoe", "john@example.com");
+
+    ApiResponse<User> response = userService.createUser(payload);
+
+    ApiAssertions.assertStatusCode(response, 201);
+    assertUserBasics(response.body());
+}
+
+@Test
+void getMissingUser() throws IOException, InterruptedException {
+    TestLogger.step("GET /users/999999");
+    ApiResponse<User> response = userService.getUserById(999999);
+
+    ApiAssertions.assertStatusCode(response, 404);
+}
+
+@Test
+void deleteUser() throws IOException, InterruptedException {
+    TestLogger.step("DELETE /users/1");
+    ApiResponse<Void> response = userService.deleteUser(1);
+
+    // Custom assertion handles 200 or 204 — both are valid DELETE responses
+    ApiAssertions.assertStatusCodeIn(response, 200, 204);
+}
+```
+
+`assertUserBasics` is a shared private helper that validates the three required fields (`name`, `username`, `email`) across multiple tests without duplication. `assertStatusCodeIn` handles cases where the server legitimately returns one of several valid status codes — a pattern frameworks like RestAssured implement internally but here is made explicit.
+
+
 ## Project Structure
 ```text
 api-automation/

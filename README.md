@@ -85,7 +85,6 @@ void deleteUser() throws IOException, InterruptedException {
 
 `assertUserBasics` is a shared private helper that validates the three required fields (`name`, `username`, `email`) across multiple tests without duplication. `assertStatusCodeIn` handles cases where the server legitimately returns one of several valid status codes — a pattern frameworks like RestAssured implement internally but here is made explicit.
 
-
 ## Project Structure
 ```text
 api-automation/
